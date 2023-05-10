@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/book_management
+    username: root
+    password: root
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 258280985651-fqdtjn29npriaj74ao1k870umn2nfadk.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - email
+            - profile
+
+    
+mybatis:
+  type-aliases-package: com.web.study.domain.entity
+  mapper-locations:
+    - /mappers/*.xml
+    
+jwt:
+  secret: ahE2Y9h5lNteLZGS3PuRTtdI1seUdvUsahE2Y9h5lNteLZGS3PuRTtdI1seUdvUs

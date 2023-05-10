@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.oauth2.repository.UserRepository">
+
+    <resultMap type="com.study.oauth2.entity.User" id="userMap">
+      <id property="userId" column="user_id"/>
+      <result property="email" column="email"/>
+      <result property="password" column="password"/>
+      <result property="name" column="name"/>
+      <result property="provider" column="provider"/>
+      <collection property="authorities" javaType="list" resultMap="authorityMap"/>
+    </resultMap>
+    
+    <resultMap type="com.study.oauth2.entity.Authority" id="authorityMap">
+      <id property="authorityId" column="authority_id"/>
+      <id property="userId" column="user_id"/>
+      <id property="roleId" column="role_id"/>
+      <association property="role" resultMap="roleMap"/>     
+    </resultMap>
+    
+    <resultMap type="com.study.oauth2.entity.Role" id="roleMap">
+      <id property="roleId" column="role_id"/>
+      <result property="roleName" column="role_name"/>
+    </resultMap>
+	
+	<insert id="saveUser" 
+	   parameterType="com.study.oauth2.entity.User"
+	   useGeneratedKeys="true"
+	   keyProperty="userId">
+	       insert into user_tb
+	       value(0,#{email}, #{password}, #{name}, #{provider})
+	</insert>
+	
+	<insert id="saveAuthority" parameterType="com.study.oauth2.entity.Authority" >
+	    insert into authority_tb
+	    value(0, #{userId}, #{roleId})
+	</insert>
+	
+    <select id="findUserByEmail"  resultMap="userMap">
+          select
+				um.user_id,
+				um.email,
+				um.password,
+				um.name,
+				um.provider,
+
+				am.authority_id,
+    			am.user_id,
+    			am.role_id,
+	    
+    			rm.role_id,
+    			rm.role_name
+		from
+				user_tb um
+				left outer join authority_tb am on(am.user_id = um.user_id)
+				left outer join role_tb rm on(rm.role_id = am.role_id)
+		where
+				um.email = #{email}
+    </select>
+	
+	
+	
+</mapper>
